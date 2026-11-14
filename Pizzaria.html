@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bella Napoli | Pizzaria Gourmet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #fff; scroll-behavior: smooth; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        .gold-text { color: #d4af37; }
+        .bg-gold { background-color: #d4af37; }
+        .pizza-card:hover { transform: translateY(-8px); transition: all 0.3s ease; }
+        .modal-overlay { background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
+        
+        /* Ajustes mobile específicos */
+        @media (max-width: 640px) {
+            .hero-title { font-size: 3.5rem !important; line-height: 1.1; }
+            .mobile-menu-open { overflow: hidden; }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Header -->
+    <header class="fixed w-full z-50 bg-black/95 border-b border-white/10 px-4 md:px-6 py-3 md:py-4 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='#inicio'">
+                <img src="https://tybaycwjwadocqecrgyx.supabase.co/storage/v1/object/public/project-assets/8d494f51-84b3-4cb5-8312-d427025267de/fea9d823-2d44-4e54-9599-ba8c7fc1ed7c/attached-ca107c36-db54-4fd2-b406-9708c930fa80-a-pepperoni-pizza-on-a-transparent-background-free-png.png" alt="Logo" class="w-10 h-10 md:w-12 md:h-12 object-contain">
+                <span class="text-xl md:text-2xl font-bold gold-text tracking-tighter">BELLA NAPOLI</span>
+            </div>
+            
+            <nav class="hidden lg:flex gap-8 font-medium">
+                <a href="#inicio" class="hover:text-[#d4af37] transition">Início</a>
+                <a href="#cardapio" class="hover:text-[#d4af37] transition">Cardápio</a>
+                <a href="#promocoes" class="hover:text-[#d4af37] transition text-red-500 font-bold">Promoções</a>
+                <a href="#contato" class="hover:text-[#d4af37] transition">Contato</a>
+            </nav>
+
+            <div class="flex items-center gap-2 md:gap-4">
+                <button onclick="toggleCart()" class="relative p-2 hover:bg-white/10 rounded-full transition">
+                    <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                    <span id="cart-count" class="absolute top-0 right-0 bg-red-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold border-2 border-black">0</span>
+                </button>
+                <a href="#cardapio" class="bg-red-700 hover:bg-red-800 text-white px-4 md:px-6 py-2 rounded-full text-xs md:text-sm font-bold transition">PEDIR</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="relative min-h-screen flex items-center px-6 pt-20 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=2070" class="w-full h-full object-cover opacity-30" alt="Fundo">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black to-black md:bg-gradient-to-r md:from-black md:via-black/60 md:to-transparent"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 relative z-10 w-full pt-12 md:pt-0">
+            <div class="space-y-6 text-center lg:text-left">
+                <span class="inline-block bg-red-700/20 border border-red-700 text-red-500 px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase">Artesanal & Italiana</span>
+                <h1 class="hero-title text-5xl md:text-7xl lg:text-8xl leading-tight">O verdadeiro sabor da <span class="gold-text">Pizza</span></h1>
+                <p class="text-base md:text-xl text-gray-400 max-w-lg mx-auto lg:mx-0">Ingredientes selecionados e massa de longa fermentação do forno direto para sua mesa.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="#cardapio" class="bg-red-700 hover:bg-red-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition shadow-xl text-center">Ver Cardápio</a>
+                    <a href="#promocoes" class="border border-gold gold-text hover:bg-gold/10 px-8 py-4 rounded-xl font-bold text-lg transition text-center">Promoções</a>
+                </div>
+            </div>
+            <div class="hidden lg:flex justify-center items-center">
+                <img src="https://tybaycwjwadocqecrgyx.supabase.co/storage/v1/object/public/project-assets/8d494f51-84b3-4cb5-8312-d427025267de/fea9d823-2d44-4e54-9599-ba8c7fc1ed7c/attached-ca107c36-db54-4fd2-b406-9708c930fa80-a-pepperoni-pizza-on-a-transparent-background-free-png.png" 
+                     class="w-[500px] animate-[spin_60s_linear_infinite] drop-shadow-[0_35px_35px_rgba(255,0,0,0.3)]" alt="Pizza Hero">
+            </div>
+        </div>
+    </section>
+
+    <!-- Promotions Section -->
+    <section id="promocoes" class="py-20 md:py-24 px-4 md:px-6 bg-[#080808]">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12 md:mb-16">
+                <span class="text-red-500 font-bold tracking-widest uppercase text-xs md:text-sm">Ofertas Imperdíveis</span>
+                <h2 class="text-3xl md:text-5xl mb-4 mt-2">Promoções da Semana</h2>
+                <div class="w-16 md:w-24 h-1 bg-gold mx-auto"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                <div class="bg-gradient-to-br from-red-900/20 to-black border border-red-700/30 rounded-3xl p-6 md:p-8 relative overflow-hidden">
+                    <span class="bg-red-700 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase mb-4 inline-block">Combo Casal</span>
+                    <h3 class="text-xl md:text-2xl font-bold mb-2">1 Pizza Média + Refri</h3>
+                    <p class="text-gray-400 mb-6 text-xs md:text-sm">Sabor tradicional + Coca-Cola 1.5L.</p>
+                    <div class="flex items-end gap-2 mb-6">
+                        <span class="text-gray-500 line-through text-sm">R$ 68,90</span>
+                        <span class="text-2xl md:text-3xl font-bold gold-text">R$ 54,90</span>
+                    </div>
+                    <button onclick="window.location.href='#cardapio'" class="w-full py-3 bg-red-700 hover:bg-red-800 rounded-xl font-bold transition text-sm">APROVEITAR</button>
+                </div>
+                <div class="bg-gradient-to-br from-gold/10 to-black border border-gold/30 rounded-3xl p-6 md:p-8 relative overflow-hidden">
+                    <span class="bg-gold text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase mb-4 inline-block">Mais Vendida</span>
+                    <h3 class="text-xl md:text-2xl font-bold mb-2">Combo Família GG</h3>
+                    <p class="text-gray-400 mb-6 text-xs md:text-sm">1 Pizza Família + 1 Doce Média + 2L.</p>
+                    <div class="flex items-end gap-2 mb-6">
+                        <span class="text-gray-500 line-through text-sm">R$ 134,90</span>
+                        <span class="text-2xl md:text-3xl font-bold gold-text">R$ 109,90</span>
+                    </div>
+                    <button onclick="window.location.href='#cardapio'" class="w-full py-3 bg-gold text-black hover:bg-yellow-600 rounded-xl font-bold transition text-sm">APROVEITAR</button>
+                </div>
+                <div class="bg-gradient-to-br from-white/5 to-black border border-white/10 rounded-3xl p-6 md:p-8 relative overflow-hidden md:col-span-2 lg:col-span-1">
+                    <span class="bg-white/10 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase mb-4 inline-block">Terça em Dobro</span>
+                    <h3 class="text-xl md:text-2xl font-bold mb-2">2 Pizzas Grandes</h3>
+                    <p class="text-gray-400 mb-6 text-xs md:text-sm">Leve duas e pague metade na segunda unidade.</p>
+                    <div class="flex items-end gap-2 mb-6 text-gray-400 italic text-sm">Desconto automático</div>
+                    <button onclick="window.location.href='#cardapio'" class="w-full py-3 border border-white/20 hover:bg-white/10 rounded-xl font-bold transition text-sm">VER CARDÁPIO</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="cardapio" class="py-20 md:py-24 px-4 md:px-6 bg-[#0c0c0c]">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-5xl mb-4">Nosso Cardápio</h2>
+                <div class="w-16 md:w-24 h-1 bg-gold mx-auto mb-8"></div>
+                <div class="flex overflow-x-auto pb-4 md:pb-0 no-scrollbar justify-start md:justify-center gap-3">
+                    <button onclick="filterMenu('tradicional')" class="cat-btn shrink-0 active bg-red-700 text-white px-5 py-2 rounded-full text-sm font-semibold transition">Tradicionais</button>
+                    <button onclick="filterMenu('especial')" class="cat-btn shrink-0 border border-white/10 hover:bg-white/5 px-5 py-2 rounded-full text-sm font-semibold transition">Especiais</button>
+                    <button onclick="filterMenu('premium')" class="cat-btn shrink-0 border border-white/10 hover:bg-white/5 px-5 py-2 rounded-full text-sm font-semibold transition">Premium</button>
+                    <button onclick="filterMenu('doce')" class="cat-btn shrink-0 border border-white/10 hover:bg-white/5 px-5 py-2 rounded-full text-sm font-semibold transition">Doces</button>
+                </div>
+            </div>
+
+            <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full max-w-md bg-black border-l border-white/10 z-[60] translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+        <div class="p-4 md:p-6 flex justify-between items-center border-b border-white/10">
+            <h3 class="text-xl md:text-2xl font-bold">Seu Pedido</h3>
+            <button onclick="toggleCart()" class="p-2 hover:bg-white/10 rounded-full transition"><i data-lucide="x"></i></button>
+        </div>
+        
+        <div id="cart-items" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 custom-scroll">
+            <!-- Injected via JS -->
+        </div>
+
+        <div class="p-4 md:p-6 border-t border-white/10 bg-[#0c0c0c] space-y-4">
+            <div class="flex justify-between text-gray-400 text-sm"><span>Subtotal</span><span id="cart-subtotal">R$ 0,00</span></div>
+            <div class="flex justify-between text-lg md:text-xl font-bold text-white"><span>Total</span><span id="cart-total" class="gold-text">R$ 0,00</span></div>
+            <button onclick="openCheckout()" class="w-full bg-red-700 hover:bg-red-800 text-white py-3 md:py-4 rounded-xl font-bold text-base md:text-lg transition">FINALIZAR PEDIDO</button>
+        </div>
+    </div>
+
+    <!-- Modal Detalhes/Checkout -->
+    <div id="modal-container" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 modal-overlay overflow-y-auto">
+        <!-- Injected via JS -->
+    </div>
+
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/5521998391669" target="_blank" class="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 p-3 md:p-4 rounded-full shadow-2xl transition hover:scale-110 z-50">
+        <i data-lucide="message-circle" class="w-6 h-6 md:w-8 md:h-8"></i>
+    </a>
+
+    <!-- Footer -->
+    <footer id="contato" class="bg-black border-t border-white/10 pt-16 pb-10 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12 text-center md:text-left">
+            <div class="md:col-span-2">
+                <div class="flex items-center justify-center md:justify-start gap-2 mb-6">
+                    <img src="https://tybaycwjwadocqecrgyx.supabase.co/storage/v1/object/public/project-assets/8d494f51-84b3-4cb5-8312-d427025267de/fea9d823-2d44-4e54-9599-ba8c7fc1ed7c/attached-ca107c36-db54-4fd2-b406-9708c930fa80-a-pepperoni-pizza-on-a-transparent-background-free-png.png" class="w-8 h-8 object-contain">
+                    <span class="text-xl font-bold gold-text">BELLA NAPOLI</span>
+                </div>
+                <p class="text-gray-400 max-w-sm mx-auto md:mx-0 text-sm">Elevando a arte de fazer pizza desde 1994. Qualidade absoluta, do forno direto para sua mesa.</p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 uppercase text-xs tracking-widest text-gold">Contato</h4>
+                <ul class="text-gray-400 space-y-3 text-sm">
+                    <li class="flex justify-center md:justify-start gap-2"><i data-lucide="map-pin" class="w-4 text-red-600"></i> Av. das Pizzas, 1000 - RJ</li>
+                    <li class="flex justify-center md:justify-start gap-2"><i data-lucide="phone" class="w-4 text-red-600"></i> (21) 99839-1669</li>
+                    <li class="flex justify-center md:justify-start gap-2"><i data-lucide="instagram" class="w-4 text-red-600"></i> @bellanapolisp</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 uppercase text-xs tracking-widest text-gold">Horário</h4>
+                <ul class="text-gray-400 space-y-2 text-sm">
+                    <li>Ter - Qui: 18h às 23h</li>
+                    <li>Sex - Dom: 18h às 00h</li>
+                    <li class="text-red-500 font-bold italic">Segunda: Fechado</li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-center text-gray-600 text-[10px] md:text-xs border-t border-white/5 pt-8">
+            &copy; 2024 Bella Napoli Pizzaria Gourmet. Todos os direitos reservados.
+        </div>
+    </footer>
+
+    <script>
+        const WHATSAPP_NUMBER = "5521998391669";
+
+        const products = [
+            { id: 2, name: "Pepperoni Classic", type: "tradicional", price: 52.90, desc: "Muçarela, rodelas de pepperoni premium levemente apimentadas e orégano.", img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&q=80&w=800", badge: "BEST SELLER" },
+            { id: 3, name: "Calabresa Especial", type: "tradicional", price: 48.90, desc: "Calabresa artesanal, cebola roxa caramelizada e azeitonas pretas.", img: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&q=80&w=800" },
+            { id: 4, name: "Quattro Formaggi", type: "especial", price: 59.90, desc: "Gorgonzola, provolone, muçarela e parmesão curado 12 meses.", img: "https://images.unsplash.com/photo-1573821663912-569905455b1c?auto=format&fit=crop&q=80&w=800" },
+            { id: 5, name: "Trufa & Cogumelos", type: "premium", price: 89.90, desc: "Mix de cogumelos selvagens, azeite de trufas brancas e lascas de grana padano.", img: "https://images.unsplash.com/photo-1555072956-7758afb20e8f?auto=format&fit=crop&q=80&w=800", badge: "PREMIUM" },
+            { id: 6, name: "Parma e Rúcula", type: "premium", price: 79.90, desc: "Presunto di parma, rúcula fresca baby e redução de balsâmico.", img: "https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?auto=format&fit=crop&q=80&w=800" },
+            { id: 7, name: "Burrata Dourada", type: "premium", price: 84.90, desc: "Tomatinhos confitados, pesto de manjericão e uma burrata inteira no centro.", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=800" },
+            { id: 8, name: "Nutella & Morango", type: "doce", price: 55.90, desc: "Nutella original, morangos frescos e raspas de chocolate branco.", img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=800" },
+            { id: 11, name: "Carbonara Pizza", type: "especial", price: 64.90, desc: "Base branca, pancetta crocante, ovos e muito parmesão.", img: "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&q=80&w=800" },
+            { id: 12, name: "Zucchini & Ricota", type: "especial", price: 51.90, desc: "Abobrinha grelhada, ricota temperada e raspas de limão siciliano.", img: "https://images.unsplash.com/photo-1528137871618-79d2761e3fd5?auto=format&fit=crop&q=80&w=800" }
+        ];
+
+        let cart = JSON.parse(localStorage.getItem('bella_napoli_cart')) || [];
+        const sizeMultipliers = { 'P': 0.7, 'M': 1, 'G': 1.3, 'F': 1.6 };
+
+        function init() {
+            lucide.createIcons();
+            renderMenu('tradicional');
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            sidebar.classList.toggle('translate-x-full');
+            document.body.classList.toggle('mobile-menu-open');
+        }
+
+        function filterMenu(type) {
+            document.querySelectorAll('.cat-btn').forEach(b => {
+                b.classList.remove('bg-red-700', 'text-white');
+                b.classList.add('border', 'border-white/10');
+            });
+            event.target.classList.add('bg-red-700', 'text-white');
+            event.target.classList.remove('border', 'border-white/10');
+            renderMenu(type);
+        }
+
+        function renderMenu(filter = 'tradicional') {
+            const grid = document.getElementById('menu-grid');
+            grid.innerHTML = products.filter(p => p.type === filter).map(p => `
+                <div class="pizza-card bg-white/5 border border-white/10 rounded-2xl md:rounded-3xl overflow-hidden group cursor-pointer" onclick="openDetails(${p.id})">
+                    <div class="relative h-48 md:h-64 overflow-hidden">
+                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="${p.name}">
+                        ${p.badge ? `<span class="absolute top-3 left-3 bg-gold text-black text-[9px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">${p.badge}</span>` : ''}
+                    </div>
+                    <div class="p-4 md:p-6">
+                        <h3 class="text-lg md:text-xl font-bold mb-1 md:mb-2">${p.name}</h3>
+                        <p class="text-gray-400 text-xs md:text-sm mb-3 md:mb-4 line-clamp-2">${p.desc}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg md:text-xl font-bold gold-text">R$ ${p.price.toFixed(2)}</span>
+                            <button class="bg-white/10 p-2 rounded-full hover:bg-gold hover:text-black transition"><i data-lucide="plus" class="w-4 h-4 md:w-5 md:h-5"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function openDetails(id) {
+            const p = products.find(x => x.id === id);
+            const modal = document.getElementById('modal-container');
+            modal.classList.remove('hidden');
+            document.body.classList.add('mobile-menu-open');
+            modal.innerHTML = `
+                <div class="bg-black border border-white/20 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl relative my-8">
+                    <button onclick="closeModal()" class="absolute top-4 right-4 z-20 bg-black/50 p-2 rounded-full text-white hover:text-gold"><i data-lucide="x"></i></button>
+                    <div class="grid md:grid-cols-2">
+                        <div class="h-64 md:h-full">
+                            <img src="${p.img}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6 md:p-8 space-y-6">
+                            <div>
+                                <h3 class="text-2xl md:text-3xl font-bold mb-2">${p.name}</h3>
+                                <p class="text-gray-400 text-sm">${p.desc}</p>
+                            </div>
+                            
+                            <div>
+                                <p class="text-xs font-bold text-gray-500 mb-2 uppercase">Selecione o Tamanho</p>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="updateModalPrice(${p.price}, 'P')" class="size-btn border border-white/20 p-2 rounded-lg text-xs">Pequena (4f)</button>
+                                    <button onclick="updateModalPrice(${p.price}, 'M')" class="size-btn border border-gold p-2 rounded-lg bg-gold/10 text-xs">Média (6f)</button>
+                                    <button onclick="updateModalPrice(${p.price}, 'G')" class="size-btn border border-white/20 p-2 rounded-lg text-xs">Grande (8f)</button>
+                                    <button onclick="updateModalPrice(${p.price}, 'F')" class="size-btn border border-white/20 p-2 rounded-lg text-xs">Família (12f)</button>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between pt-6 border-t border-white/10">
+                                <div>
+                                    <p class="text-gray-500 text-[10px] uppercase font-bold">Total</p>
+                                    <span id="modal-total" class="text-xl md:text-2xl font-bold gold-text">R$ ${p.price.toFixed(2)}</span>
+                                </div>
+                                <button onclick="addToCart(${p.id})" class="bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-xl font-bold text-sm transition">Adicionar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+            window.currentSelection = { id: p.id, size: 'M', basePrice: p.price };
+        }
+
+        function updateModalPrice(base, size) {
+            window.currentSelection.size = size;
+            const finalPrice = base * sizeMultipliers[size];
+            document.getElementById('modal-total').innerText = `R$ ${finalPrice.toFixed(2)}`;
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('border-gold', 'bg-gold/10'));
+            event.currentTarget.classList.add('border-gold', 'bg-gold/10');
+        }
+
+        function addToCart(id) {
+            const p = products.find(x => x.id === id);
+            const size = window.currentSelection.size;
+            const price = p.price * sizeMultipliers[size];
+            const existing = cart.find(i => i.id === id && i.size === size);
+            if (existing) { existing.qty++; } else { cart.push({ ...p, size, price, qty: 1 }); }
+            saveCart();
+            updateCartUI();
+            closeModal();
+            if(window.innerWidth > 768) toggleCart();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const countEl = document.getElementById('cart-count');
+            container.innerHTML = cart.length ? cart.map((item, idx) => `
+                <div class="flex gap-4 group bg-white/5 p-3 rounded-xl border border-white/10">
+                    <img src="${item.img}" class="w-16 h-16 md:w-20 md:h-20 rounded-lg object-cover">
+                    <div class="flex-1">
+                        <div class="flex justify-between">
+                            <h4 class="font-bold text-sm md:text-base">${item.name}</h4>
+                            <button onclick="removeFromCart(${idx})" class="text-gray-600 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-tighter">Tamanho: ${item.size}</p>
+                        <div class="flex justify-between items-center mt-2">
+                            <div class="flex items-center gap-2 bg-black/40 rounded-lg px-2 py-1">
+                                <button onclick="updateQty(${idx}, -1)" class="w-5 h-5 flex items-center justify-center hover:text-gold">-</button>
+                                <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                                <button onclick="updateQty(${idx}, 1)" class="w-5 h-5 flex items-center justify-center hover:text-gold">+</button>
+                            </div>
+                            <span class="font-bold text-xs md:text-sm gold-text">R$ ${(item.price * item.qty).toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('') : '<div class="h-full flex flex-col items-center justify-center text-gray-700 py-12"><i data-lucide="shopping-bag" class="w-10 h-10 mb-4 opacity-20"></i><p class="text-sm">Carrinho vazio</p></div>';
+            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            totalEl.innerText = `R$ ${total.toFixed(2)}`;
+            subtotalEl.innerText = `R$ ${total.toFixed(2)}`;
+            countEl.innerText = cart.reduce((sum, item) => sum + item.qty, 0);
+            lucide.createIcons();
+        }
+
+        function updateQty(idx, delta) {
+            cart[idx].qty += delta;
+            if (cart[idx].qty < 1) cart.splice(idx, 1);
+            saveCart();
+            updateCartUI();
+        }
+
+        function removeFromCart(idx) {
+            cart.splice(idx, 1);
+            saveCart();
+            updateCartUI();
+        }
+
+        function saveCart() {
+            localStorage.setItem('bella_napoli_cart', JSON.stringify(cart));
+        }
+
+        function closeModal() {
+            document.getElementById('modal-container').classList.add('hidden');
+            document.body.classList.remove('mobile-menu-open');
+        }
+
+        function openCheckout() {
+            if (cart.length === 0) return alert("Seu carrinho está vazio!");
+            toggleCart();
+            const modal = document.getElementById('modal-container');
+            modal.classList.remove('hidden');
+            document.body.classList.add('mobile-menu-open');
+            modal.innerHTML = `
+                <div class="bg-black border border-white/20 rounded-2xl w-full max-w-lg p-6 md:p-8 shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-300 my-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl md:text-3xl font-bold">Finalizar</h3>
+                        <button onclick="closeModal()" class="text-gray-500 hover:text-white"><i data-lucide="x"></i></button>
+                    </div>
+                    <form id="checkout-form" onsubmit="sendWhatsApp(event)" class="space-y-4">
+                        <input type="text" id="cust-name" placeholder="Seu Nome" required class="w-full bg-white/5 border border-white/10 p-3 rounded-xl focus:border-gold outline-none text-sm">
+                        <div class="flex gap-2 md:gap-4">
+                            <button type="button" onclick="setDelivery(true)" id="btn-delivery" class="flex-1 p-3 rounded-xl border-2 border-gold bg-gold/10 font-bold text-xs md:text-sm">Entrega</button>
+                            <button type="button" onclick="setDelivery(false)" id="btn-pickup" class="flex-1 p-3 rounded-xl border border-white/10 hover:border-gold font-bold transition text-xs md:text-sm">Retirada</button>
+                        </div>
+                        <div id="address-field">
+                            <input type="text" id="cust-address" placeholder="Endereço Completo" required class="w-full bg-white/5 border border-white/10 p-3 rounded-xl focus:border-gold outline-none text-sm">
+                        </div>
+                        <select id="cust-payment" required class="w-full bg-white/5 border border-white/10 p-3 rounded-xl focus:border-gold outline-none text-gray-400 text-sm">
+                            <option value="" disabled selected>Forma de Pagamento</option>
+                            <option value="Pix">Pix</option>
+                            <option value="Cartão">Cartão</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                        </select>
+                        <textarea id="cust-obs" placeholder="Observações..." class="w-full bg-white/5 border border-white/10 p-3 rounded-xl focus:border-gold outline-none h-20 text-sm"></textarea>
+                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold text-base transition flex items-center justify-center gap-2">
+                            <i data-lucide="message-circle" class="w-5 h-5"></i> ENVIAR WHATSAPP
+                        </button>
+                    </form>
+                </div>
+            `;
+            lucide.createIcons();
+            window.isDelivery = true;
+        }
+
+        function setDelivery(val) {
+            window.isDelivery = val;
+            const addr = document.getElementById('address-field');
+            const dBtn = document.getElementById('btn-delivery');
+            const pBtn = document.getElementById('btn-pickup');
+            if(val) {
+                addr.classList.remove('hidden');
+                dBtn.classList.add('border-gold', 'bg-gold/10');
+                pBtn.classList.remove('border-gold', 'bg-gold/10');
+            } else {
+                addr.classList.add('hidden');
+                pBtn.classList.add('border-gold', 'bg-gold/10');
+                dBtn.classList.remove('border-gold', 'bg-gold/10');
+            }
+        }
+
+        function sendWhatsApp(e) {
+            e.preventDefault();
+            const name = document.getElementById('cust-name').value;
+            const address = document.getElementById('cust-address').value;
+            const payment = document.getElementById('cust-payment').value;
+            const obs = document.getElementById('cust-obs').value;
+            const type = window.isDelivery ? "Entrega" : "Retirada";
+            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            
+            let msg = `🍕 *PEDIDO BELLA NAPOLI*\n\n`;
+            msg += `👤 *Cliente:* ${name}\n`;
+            msg += `🛵 *Tipo:* ${type}\n`;
+            if(window.isDelivery) msg += `📍 *End:* ${address}\n`;
+            msg += `💳 *Paga:* ${payment}\n`;
+            if(obs) msg += `📝 *Obs:* ${obs}\n\n`;
+            msg += `🛒 *ITENS:*\n`;
+            cart.forEach(item => { msg += `• ${item.qty}x ${item.name} (${item.size}) - R$ ${(item.price * item.qty).toFixed(2)}\n`; });
+            msg += `\n💰 *TOTAL: R$ ${total.toFixed(2)}*`;
+            
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+            cart = []; saveCart(); updateCartUI(); closeModal();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
